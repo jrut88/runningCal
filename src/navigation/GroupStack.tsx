@@ -1,4 +1,4 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import CreateEventScreen from '../screens/events/CreateEventScreen';
 import EventDetailScreen from '../screens/events/EventDetailScreen';
@@ -12,17 +12,17 @@ import PaymentRequestScreen from '../screens/payments/PaymentRequestScreen';
 import PaymentStatusScreen from '../screens/payments/PaymentStatusScreen';
 import type { GroupStackParamList } from './types';
 
-const Stack = createNativeStackNavigator<GroupStackParamList>();
+const Stack = createStackNavigator<GroupStackParamList>();
+
+const headerStyle = {
+  headerStyle: { backgroundColor: '#16a34a' },
+  headerTintColor: '#fff',
+  headerTitleStyle: { fontWeight: 'bold' as const },
+};
 
 export function GroupStack() {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: '#16a34a' },
-        headerTintColor: '#fff',
-        headerTitleStyle: { fontWeight: '700' },
-      }}
-    >
+    <Stack.Navigator screenOptions={headerStyle}>
       <Stack.Screen name="GroupList" component={GroupListScreen} options={{ title: 'My Groups' }} />
       <Stack.Screen name="GroupDetail" component={GroupDetailScreen} options={{ title: 'Group' }} />
       <Stack.Screen name="CreateGroup" component={CreateGroupScreen} options={{ title: 'New Group' }} />

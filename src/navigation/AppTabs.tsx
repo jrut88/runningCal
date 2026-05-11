@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { Text } from 'react-native';
 import EventDetailScreen from '../screens/events/EventDetailScreen';
@@ -9,25 +9,21 @@ import { GroupStack } from './GroupStack';
 import type { AppTabParamList, EventsStackParamList } from './types';
 
 const Tab = createBottomTabNavigator<AppTabParamList>();
-const EventsStack = createNativeStackNavigator<EventsStackParamList>();
+const EventsStack = createStackNavigator<EventsStackParamList>();
+
+const headerStyle = {
+  headerStyle: { backgroundColor: '#16a34a' },
+  headerTintColor: '#fff',
+  headerTitleStyle: { fontWeight: 'bold' as const },
+};
 
 function EventsNavigator() {
   return (
-    <EventsStack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: '#16a34a' },
-        headerTintColor: '#fff',
-        headerTitleStyle: { fontWeight: '700' },
-      }}
-    >
+    <EventsStack.Navigator screenOptions={headerStyle}>
       <EventsStack.Screen name="AllEvents" component={AllEventsScreen} options={{ title: 'Upcoming Events' }} />
       <EventsStack.Screen name="EventDetail" component={EventDetailScreen} options={{ title: 'Event' }} />
     </EventsStack.Navigator>
   );
-}
-
-function TabIcon({ emoji, label, focused }: { emoji: string; label: string; focused: boolean }) {
-  return <Text style={{ fontSize: focused ? 22 : 18 }}>{emoji}</Text>;
 }
 
 export function AppTabs() {
@@ -45,7 +41,7 @@ export function AppTabs() {
         component={GroupStack}
         options={{
           tabBarLabel: 'Groups',
-          tabBarIcon: ({ focused }) => <TabIcon emoji="👥" label="Groups" focused={focused} />,
+          tabBarIcon: ({ focused }) => <Text style={{ fontSize: focused ? 22 : 18 }}>👥</Text>,
         }}
       />
       <Tab.Screen
@@ -53,7 +49,7 @@ export function AppTabs() {
         component={EventsNavigator}
         options={{
           tabBarLabel: 'Events',
-          tabBarIcon: ({ focused }) => <TabIcon emoji="📅" label="Events" focused={focused} />,
+          tabBarIcon: ({ focused }) => <Text style={{ fontSize: focused ? 22 : 18 }}>📅</Text>,
         }}
       />
       <Tab.Screen
@@ -61,12 +57,10 @@ export function AppTabs() {
         component={ProfileScreen}
         options={{
           tabBarLabel: 'Profile',
-          tabBarIcon: ({ focused }) => <TabIcon emoji="👤" label="Profile" focused={focused} />,
+          tabBarIcon: ({ focused }) => <Text style={{ fontSize: focused ? 22 : 18 }}>👤</Text>,
           headerShown: true,
           headerTitle: 'Profile',
-          headerStyle: { backgroundColor: '#16a34a' },
-          headerTintColor: '#fff',
-          headerTitleStyle: { fontWeight: '700' },
+          ...headerStyle,
         }}
       />
     </Tab.Navigator>
