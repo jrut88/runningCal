@@ -20,11 +20,15 @@ export default function LoginPage() {
 
   const onSubmit = async (data: FormData) => {
     setError('')
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email: data.email,
-      password: data.password,
-    })
-    if (authError) setError(authError.message)
+    try {
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      })
+      if (authError) setError(authError.message)
+    } catch (e: any) {
+      setError(e?.message ?? 'Could not connect — check your internet connection')
+    }
   }
 
   return (

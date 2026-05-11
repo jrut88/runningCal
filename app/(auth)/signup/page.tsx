@@ -22,15 +22,19 @@ export default function SignUpPage() {
 
   const onSubmit = async (data: FormData) => {
     setError('')
-    const { error: authError } = await supabase.auth.signUp({
-      email: data.email,
-      password: data.password,
-      options: { data: { display_name: data.displayName } },
-    })
-    if (authError) {
-      setError(authError.message)
-    } else {
-      setSuccess(true)
+    try {
+      const { error: authError } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: { data: { display_name: data.displayName } },
+      })
+      if (authError) {
+        setError(authError.message)
+      } else {
+        setSuccess(true)
+      }
+    } catch (e: any) {
+      setError(e?.message ?? 'Could not connect — check your internet connection')
     }
   }
 
