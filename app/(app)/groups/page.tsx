@@ -15,7 +15,7 @@ function sportEmoji(sport: string): string {
 
 export default function GroupsPage() {
   const router = useRouter()
-  const { data: groups, isLoading } = useUserGroups()
+  const { data: groups, isLoading, error } = useUserGroups()
   const joinMutation = useJoinGroup()
   const [inviteCode, setInviteCode] = useState('')
   const [joinError, setJoinError] = useState('')
@@ -60,6 +60,12 @@ export default function GroupsPage() {
         </button>
       </div>
       {joinError && <p className="text-red-600 text-sm text-center py-2 px-4">{joinError}</p>}
+
+      {error && (
+        <p className="text-red-600 text-sm text-center py-4 px-4">
+          Error loading groups: {(error as any).message}
+        </p>
+      )}
 
       {isLoading ? (
         <div className="flex justify-center py-12">

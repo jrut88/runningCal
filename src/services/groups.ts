@@ -2,12 +2,24 @@ import { supabase } from '../lib/supabase';
 import type { Group, GroupMember, GroupWithRole } from '../types/app';
 
 export async function fetchUserGroups(): Promise<GroupWithRole[]> {
-  const { data, error } = await supabase
+  const { data: memberships, error: membError } = await supabase
     .from('group_members')
-    .select('role, group:groups(*)')
+    .select('group_id, role')
     .order('joined_at', { ascending: false });
-  if (error) throw error;
-  return (data ?? []).map((row: any) => ({ ...row.group, role: row.role }));
+  if (membError) throw membError;
+  if (!memberships || memberships.length === 0) return [];
+
+  const groupIds = memberships.map((m) => m.group_id);
+  const { data: groups, error: groupsError } = await supabase
+    .from('groups')
+    .select('*')
+    .in('id', groupIds);
+  if (groupsError) throw groupsError;
+
+  return (groups ?? []).map((group) => ({
+    ...group,
+    role: memberships.find((m) => m.group_id === group.id)?.role ?? 'member',
+  })) as GroupWithRole[];
 }
 
 export async function fetchGroupDetail(groupId: string): Promise<Group> {
